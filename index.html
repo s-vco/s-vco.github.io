@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="S-VCO: Symmetrical Visual Contrastive Optimization for Large Vision-Language Models.">
+  <meta name="keywords" content="vision-language model, finetuning, LLM, multimodality">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>S-VCO</title>
+
+  <!-- Fonts & Basic CSS -->
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="icon" href="static/images/icon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+</head>
+
+<style>
+  .small-image-30 {
+    max-width: 30px; 
+    height: auto;
+  }
+  .small-image {
+    max-width: 200px; 
+    height: auto;
+  }
+</style>
+
+<body>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-2 publication-title">
+              Symmetrical Visual Contrastive Optimization: <br>
+              Aligning Vision-Language Models with Minimal Contrastive Images
+            </h1>
+  
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://cs.stanford.edu/~shgwu/" target="_blank">
+                  <b>Shengguang Wu</b>
+                </a>&emsp;
+              </span>
+              <span class="author-block">
+                <a href="https://sunfanyun.com/" target="_blank">
+                  <b>Fan-Yun Sun</b>
+                </a>&emsp;
+              </span>
+              <span class="author-block">
+                <a href="https://whenwen.github.io/" target="_blank">
+                  <b>Kaiyue Wen</b>
+                </a>&emsp;
+              </span>
+              <span class="author-block">
+                <a href="https://www.autonomousagents.stanford.edu/people" target="_blank">
+                  <b>Nick Haber</b>
+                </a>&emsp;
+              </span>
+            </div>
+  
+            <br>
+            
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><img src="images/stanford_logo.avif" class="small-image-30"> <img src="images/stanford_text.png" class="small-image"></span>
+            </div>
+  
+            <div class="content has-text-centered" style="margin-top: 1em;">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="" target="_blank"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>Arxiv</span>
+                  </a>
+                </span>
+  
+                <span class="link-block">
+                  <a href="https://github.com/s-vco/s-vco" target="_blank"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code &amp; Data</span>
+                  </a>
+                </span>
+  
+                <!-- <span class="link-block">
+                  <a href=""
+                     target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-twitter"></i>
+                    </span>
+                    <span>Twitter</span>
+                  </a>
+                </span> -->
+              </div>
+            </div>
+
+          </div> <!-- column -->
+        </div> <!-- columns -->
+      </div> <!-- container -->
+    </div> <!-- hero-body -->
+  </section>
+
+
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <!-- <h2 class="title is-3 has-text-centered">S-VCO: Symmetrical Visual Contrastive Optimization</h2> -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-five-sixths has-text-justified">
+          <p> 
+            Large Vision-Language Models (VLMs) often over-rely on language priors and <b>neglect visual details</b>, leading to visual hallucinations. An example below illustrates a counterintuitive pattern, where a base-VLM<sup><a href="https://huggingface.co/llava-hf/llava-interleave-qwen-7b-hf" target="_blank">LV-INT</a></sup> is most likely to generate <span style="color: #05B0F0;">the response about "the dog"</span> when given <span style="color: #7F7F7F;"><b>no image input</b></span>, and least likely when shown <span style="color: #05B0F0;"><b>the matching image</b></span> -- even less than with <span style="color: #F49443;"><b>the mismatched image</b> ("the cat")</span>.
+          </p>
+  
+          <br>
+
+          <img src="images/ppl_distributions.png" alt="ppl_distributions" style="display: block; margin: 0 auto; width: 70%; height: auto;">
+
+        </div> <!-- column -->
+      </div> <!-- columns -->
+    </div> <!-- container -->
+  </section>
+
+
+  <section class="section hero is-white">
+    <div class="container is-max-desktop">
+      <!-- <h2 class="title is-3 has-text-centered">S-VCO: Symmetrical Visual Contrastive Optimization</h2> -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-five-sixths has-text-justified">
+          <p> 
+            We propose <b>S-VCO (Symmetrical Visual Contrastive Optimization)</b>, a novel VLM finetuning paradigm that enforces explicit supervision over visual details and their alignment to texts, thus enhancing visually dependent task capabilities while preserving or improving general performance.
+          </p>
+          
+          <br>
+
+          <img src="images/svco_data_method.png" alt="svco_data_method" width="100%"/>
+          
+          <br>
+          <br>
+
+          <h3 class="title is-5 has-text-left">Visual Contrastive Optimization</h3>
+          <p>
+            Using contrastive image-text pairs of detailed visual differences (visual counterfactual data), S-VCO enforces a strict visual focus by optimizing two key behaviors with <span style="color: #7F7F7F;"><b>no image input</b></span> as an intermediate reference: <b>Attending to <span style="color: #05B0F0;">the matching image</span></b> & <b>Rejecting <span style="color: #F49443;">the contradictory image</span></b>.
+          </p>
+          
+          <br>
+
+          <h3 class="title is-5 has-text-left">Symmetry</h3>
+          <p>
+            Unlike <b>"preference"</b>-based finetuning<sup><span style="color: hsl(204, 86%, 53%)"><a href="https://arxiv.org/abs/2305.18290/" target="_blank">DPO</a></span>,<span style="color: hsl(204, 86%, 53%);"><a href="https://arxiv.org/abs/2406.11839/" target="_blank">mDPO</a></span>,<span style="color: hsl(204, 86%, 53%);"><a href="https://arxiv.org/abs/2410.15334/" target="_blank">MFPO</a></span></sup>, S-VCO treats both sides of an image pair simply as <b>contrastive</b> conditions, where either can be "preferred" depending on the paired textual response. Through a <span style="color: #F8A09C;"><b>symmetrical</b></span> construct that flips roles (<em>i.e.,</em> <span style="color: #F49443;">the "negative" image</span> becomes the "preferred" visual condition when paired with the corresponding text), S-VCO fosters <b>genuine alignment of image-text pairs</b> without risking shortcut learning on superficial unimodal features.
+          </p>
+        </div> <!-- column -->
+      </div> <!-- columns -->
+    </div> <!-- container -->
+  </section>
+
+
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <!-- <h2 class="title is-3 has-text-centered">Qualitative Results</h2> -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-five-sixths has-text-justified">
+          <p>
+            Below are qualitative examples from various benchmarks, where <b>S-VCO</b> leads to significant enhancements of VLM's key vision-centric capabilities.
+          </p>
+
+          <br>
+          
+          <div style="text-align:center; overflow-x: auto;">
+            <img
+              src="images/qual_samples.png"
+              alt="qual_samples"
+              style="display: block; margin: 0 auto; width: 130%; max-width: none;"
+            />
+          </div>
+          
+          <br>
+          <br>
+          
+          <p>
+            Compared to <span style="color: #767171;">base-VLMs<sup><a href="https://huggingface.co/llava-hf/llava-interleave-qwen-7b-hf" target="_blank">LV-INT</a>,<a href="https://huggingface.co/llava-hf/llava-1.5-7b-hf" target="_blank">LV-1.5</a></sup></span> and prior preference-tuning methods<sup><span style="color: #FF9300;"><a href="https://arxiv.org/abs/2305.18290/" target="_blank">DPO</a></span>,<span style="color: #0070C0;"><a href="https://arxiv.org/abs/2406.11839/" target="_blank">mDPO</a></span></sup>, <span style="color: #7030A0; "><b>S-VCO</b></span> demonstrates:
+            <br>
+            <br>
+            &emsp;• enhanced ability to detect <b>fine-grained visual details: </b> 
+              <em>e.g., identifying the absence of a toothbrush</em>. 
+            <br>
+            <br>
+            &emsp;• <b>strong resilience to visual hallucinations:</b> 
+              <em>e.g., recognizing marker-drawings instead of glasses, fire hydrants, slide-phones</em>. 
+            <br>
+            <br>
+            &emsp;• <b>advanced reasoning grounded in visual cues:</b> 
+              <em>e.g., interpreting drive-lane conditions &amp; regulations, estimating object sizes &amp; distances</em>. 
+            <br>
+            <br>
+            &emsp;• <b>complex scene understanding</b> by capturing intricate context details<b>:</b>
+              <em>e.g., identifying outdoor weather through indoor windows, recognizing oncoming vehicles in low-light settings</em>. 
+          </p>
+        </div> <!-- column -->
+      </div> <!-- columns -->
+    </div> <!-- container -->
+  </section>
+
+
+  <section class="section hero is-white">
+    <div class="container is-max-desktop">
+      <!-- <h2 class="title is-3 has-text-centered">MVC: Minimal Visual Contrasts Dataset</h2> -->
+      <div class="columns is-centered">
+        <div class="column is-five-sixths has-text-justified">
+          <p>
+            To complement the S-VCO objective, we construct <b>MVC</b>, a dataset of image pairs featuring <b>M</b>inimal but meaningful <b>V</b>isual <b>C</b>ontrasts, paired with corresponding texts. 
+          </p>
+
+          <br>
+
+          <img src="images/data_pipeline.png" alt="data_pipeline" width="100%"/>
+          
+          <br>
+          <br>
+
+          <p class="content">
+            <b>MVC</b> builds upon visual counterfactual data sources<sup><span style="color: hsl(204, 86%, 53%);"><a href="https://countercurate.github.io/" target="_blank">CounterCurate</a></span>,<span  style="color: hsl(204, 86%, 53%);"><a href="https://github.com/liujunzhuo/FineCops-Ref/" target="_blank">FineCops-Ref</a></span></sup> and implements:
+            <br>
+            <br>
+            &emsp;• a <b>vision-centric filter</b><sup>inspired by <span style="color: hsl(204, 86%, 53%);"><a href="https://arxiv.org/abs/2401.06209/" target="_blank">CLIP-Blindness</a></span></sup> to ensure the image pairs  are visually challenging yet semantically relevant.
+            <br>
+            <br>
+            &emsp;• a <b>language-augmentation step</b> that yields diversified wording in conversational-style, better suited for VLM finetuning.
+          </p>
+        </div> <!-- column -->
+      </div> <!-- columns -->
+    </div> <!-- container -->
+  </section>
+
+
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <!-- <h2 class="title is-3 has-text-centered">Quantitative Results</h2> -->
+      <div class="columns is-centered">
+        <div class="column is-five-sixths has-text-justified">
+          <p>
+          We compared <b>S-VCO</b> with existing finetuning methods<sup><span style="color: hsl(204, 86%, 53%);"><a href="https://arxiv.org/abs/2305.18290/" target="_blank">DPO</a></span>,<span style="color: hsl(204, 86%, 53%);"><a href="https://arxiv.org/abs/2406.11839/" target="_blank">mDPO</a></span></sup>, as well as our <b>MVC</b> dataset against prior preference tuning data<sup><span style="color: hsl(204, 86%, 53%);"><a href="https://huggingface.co/datasets/MMInstruction/VLFeedback" target="_blank">VLF</a></span></sup> on multiple base VLMs<sup><span style="color: hsl(204, 86%, 53%);"><a href="https://huggingface.co/llava-hf/llava-1.5-7b-hf" target="_blank">LV-1.5-7B</a></span>, <span style="color: hsl(204, 86%, 53%);"><a href="https://huggingface.co/llava-hf/llava-interleave-qwen-7b-hf"   target="_blank">LV-INT-7B</a></span></sup> across diverse benchmarks covering various ability domains.
+          </p>
+
+          <br>
+
+          <img src="images/result_table.png" alt="S-VCO Results" width="100%"/>
+
+          <br>
+          <br>
+
+          <p>
+            &emsp;• S-VCO achieves <b>consistently superior performance</b> across benchmarks in various domains, improving LV-1.5 and LV-INT overall by <b>12.17%</b> and <b>8.59%</b>, respectively.
+            <br>
+            <br>
+            &emsp;• S-VCO delivers the most substantial gains on <b>visually demanding benchmarks</b> <em>e.g.,</em> <span style="color: hsl(204, 86%, 53%);"><a href="https://huggingface.co/datasets/Shengcao1006/MMHal-Bench" target="_blank">MM-Hal</a></span> (<b>> 20%</b> improvement), <span style="color: hsl(204, 86%, 53%);"><a href="https://arxiv.org/abs/2308.02490" target="_blank">MMVet</a></span>, <span   style="color: hsl(204, 86%, 53%);"><a href="https://github.com/haotian-liu/LLaVA/blob/main/docs/LLaVA_Bench.md" target="_blank">LLaVABench</a></span>.
+            <br>
+            <br>
+            &emsp;• <b>MVC dataset</b> enhances prior preference tuning methods: For LV-INT, both DPO and mDPO achieve greater overall improvements when trained on MVC; For LV-1.5, DPO<sub><b>MVC</b></sub> outperforms   DPO<sub><b>VLF</b></sub> by <b>&sim;7%</b> on average across benchmarks.
+            <br>
+            <br>
+            &emsp;• Ablations (the last three rows) highlight the importance of MVC's <b>data filtering &amp; augmentation</b> steps, S-VCO's <b>symmetry</b> construct, as well as the <b>drawbacks of standard SFT</b> even   on doubled data size.
+          </p>
+        </div> <!-- column -->
+      </div> <!-- columns -->
+    </div> <!-- container -->
+  </section>
+
+
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title is-3 has-text-centered">Citation</h2>
+      <pre><code>
+      </code></pre>
+    </div>
+  </section>
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content has-text-centered">
+            <p>
+              This page was built using a template inspired by <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>.
+            </p>
+            <!-- <p>
+              <em>&copy; 2025 by S-VCO Authors</em>
+            </p> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
